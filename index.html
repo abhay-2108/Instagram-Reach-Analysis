@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instagram Reach Prediction</title>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #3b82f6;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+        input:focus {
+            border-color: #3b82f6;
+        }
+        button {
+            background-color: #3b82f6;
+            color: #fff;
+            border: none;
+            padding: 0.75rem;
+            width: 100%;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        .result {
+            margin-top: 1rem;
+            text-align: center;
+            color: #10b981;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Instagram Reach Predictor</h1>
+        <form id="prediction-form">
+            <div class="form-group">
+                <label>Followers</label>
+                <input type="number" name="followers" required>
+            </div>
+            <div class="form-group">
+                <label>Caption Length</label>
+                <input type="number" name="caption_length" required>
+            </div>
+            <div class="form-group">
+                <label>Hashtags Length</label>
+                <input type="number" name="hashtags_length" required>
+            </div>
+            <button type="submit">Predict</button>
+        </form>
+        <div class="result" id="prediction-result"></div>
+    </div>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction-result').innerHTML = 
+                    `<h2>Predicted Reach: ${data.prediction}</h2>`;
+            })
+            .catch(error => {
+                document.getElementById('prediction-result').innerHTML = 
+                    `<h2 style="color: #ef4444;">Error predicting reach. Please try again.</h2>`;
+            });
+        });
+    </script>
+</body>
+</html>
